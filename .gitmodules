@@ -1,3 +1,6 @@
 [submodule "utility/NAudio"]
 	path = utility/NAudio
 	url = https://github.com/naudio/NAudio.git
+[submodule "utility/google-cloud-dotnet"]
+	path = utility/google-cloud-dotnet
+	url = https://github.com/GoogleCloudPlatform/google-cloud-dotnet.git
