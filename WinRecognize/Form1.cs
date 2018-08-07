@@ -25,7 +25,7 @@ using Grpc.Auth;
 using Google.Protobuf.Collections;
 using System.Threading;
 using NAudio.Mixer;
-
+using AudioRecorder;
 //using Google.Apis.CloudNaturalLanguageAPI.v1beta1.Data;
 
 //NOTE: You will have to goto "Tools->Nuget Package Manager->Packet Manager Console" and copy paste, then run the below commands
@@ -36,8 +36,7 @@ namespace WinRecognize
 {
     public partial class Form1 : Form
     {
-        private List<string> recordingDevices = new List<string>();
-        private AudioRecorder audioRecorder = new AudioRecorder();
+        private IAudioRecorder audioRecorder = new AudioRecorder.Func.AudioRecorder();
 
         private Boolean monitoring = false;
         
@@ -49,7 +48,7 @@ namespace WinRecognize
         private BufferedWaveProvider waveBuffer;
         
         // Read from the microphone and stream to API.
-        private WaveInEvent waveIn = new NAudio.Wave.WaveInEvent();
+        //private WaveInEvent waveIn = new NAudio.Wave.WaveInEvent();
         
        
         public Form1()
@@ -61,101 +60,8 @@ namespace WinRecognize
                 MessageBox.Show("No microphone! ... exiting");
                 return;
             }
-
-            //Mixer
-            //Hook Up Audio Mic for sound peak detection
-            audioRecorder.SampleAggregator.MaximumCalculated += OnRecorderMaximumCalculated;
-          
-            for (int n = 0; n < WaveIn.DeviceCount; n++)
-            {
-                recordingDevices.Add(WaveIn.GetCapabilities(n).ProductName);
-            }
-
-            //Set up Google specific code
-            //oneShotConfig = new RecognitionConfig();
-            //oneShotConfig.Encoding = RecognitionConfig.Types.AudioEncoding.Linear16;
-            //oneShotConfig.SampleRateHertz = 16000;
-            //oneShotConfig.LanguageCode = "en";
-
-            
-
-            //Set up NAudio waveIn object and events
-            waveIn.DeviceNumber = 0;
-            waveIn.WaveFormat = new NAudio.Wave.WaveFormat(16000, 1);
-            //Need to catch this event to fill our audio beffer up
-            waveIn.DataAvailable += WaveIn_DataAvailable;
-            //the actuall wave buffer we will be sending to googles for voice to text conversion
-            waveBuffer = new BufferedWaveProvider(waveIn.WaveFormat);
-            waveBuffer.DiscardOnBufferOverflow = true;
-            
-            //We are using a timer object to fire a one second record interval
-            //this gets enabled and disabled based on when we get a peak detection from NAudio
-            timer1.Enabled = false;
-            //One second record window
-            timer1.Interval = 1000;
-            //Hook up to timer tick event
-            timer1.Tick += Timer1_Tick;
-            
-
         }
-
-        /// <summary>
-        /// Fires when audio peak detected. If we get a peak audio signal 
-        /// above a certain threshold, start recording audio, set a timer to call us back after one second
-        /// so we can stop recording and send what audio we have to googles
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        void OnRecorderMaximumCalculated(object sender, MaxSampleEventArgs e)
-        {
-            float peak = Math.Max(e.MaxSample, Math.Abs(e.MinSample));
-
-            // multiply by 100 because the Progress bar's default maximum value is 100
-            peak *= 100;
-            progressBar1.Value = (int)peak;
-
-            //Console.WriteLine("Recording Level " + peak);
-            if (peak > 5)
-            {
-                //Timer should not be enabled, meaning, we are not already recording
-                if (timer1.Enabled == false)
-                {
-                    timer1.Enabled = true;
-                    waveIn.StartRecording();
-                }
-
-            }
-           
-        }
-
-        /// <summary>
-        /// When we get data from microphone or audio srouce, add to internal wave buffer for later use
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="args"></param>
-        private void WaveIn_DataAvailable(object sender, WaveInEventArgs e)
-        {
-            waveBuffer.AddSamples(e.Buffer, 0, e.BytesRecorded);
-
-        }
-
-        /// <summary>
-        /// fires after one second recording interval
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void Timer1_Tick(object sender, EventArgs e)
-        {
-            //Turn off events, will get re-enabled once another audio peak gets detected
-            timer1.Enabled = false;
-            //Stop recording
-            waveIn.StopRecording();
-           
-            //Call the async google voice stream method with our saved audio buffer
-            Task me = StreamBufferToGooglesAsync();
-          
-        }
-        
+                
         /// <summary>
         /// Wave in recording task gets called when we think we have enough audio to send to googles
         /// </summary>
@@ -179,7 +85,7 @@ namespace WinRecognize
                     {
                         Encoding = RecognitionConfig.Types.AudioEncoding.Linear16,
                         SampleRateHertz = 16000,
-                        LanguageCode = "en",
+                        LanguageCode = "ja-JP",
                     },
 
                     //Note: play with this value
@@ -260,21 +166,23 @@ namespace WinRecognize
         /// <param name="e"></param>
         private void button3_Click(object sender, EventArgs e)
         {
-            if (recordingDevices.Count > 0)
+            if (NAudio.Wave.WaveIn.DeviceCount > 0)
             {
                 if(monitoring == false)
                 {
                     monitoring = true;
                     //Begin
-                    audioRecorder.BeginMonitoring(0);
+                    audioRecorder.BeginRecording();
+
+                    button3.Text = "Record Stop";
                 }
                 else
                 {
                     monitoring = false;
-                    audioRecorder.Stop();
+                    audioRecorder.StopRecording();
+
+                    button3.Text = "Record Start";
                 }
-
-
             }
             
         }

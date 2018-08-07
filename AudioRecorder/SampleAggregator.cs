@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 
-namespace WinRecognize
+namespace AudioRecorder
 {
     public class SampleAggregator
     {
@@ -20,7 +20,7 @@ namespace WinRecognize
         private void Reset()
         {
             count = 0;
-            maxValue = minValue = 0;            
+            maxValue = minValue = 0;
         }
 
         public void Add(float value)
@@ -35,7 +35,7 @@ namespace WinRecognize
                     MaximumCalculated(this, new MaxSampleEventArgs(minValue, maxValue));
                 }
                 Reset();
-            }   
+            }
         }
     }
 

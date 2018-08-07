@@ -1,9 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.27703.2047
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WinRecognize", "WinRecognize\WinRecognize.csproj", "{BC6CBA47-D179-4261-93C5-8489BCE88221}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ai-Recorder-Service", "Ai-Recorder-Service\Ai-Recorder-Service.csproj", "{017CC4F0-3C14-4480-B73B-523016EB38ED}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AudioRecorder", "AudioRecorder\AudioRecorder.csproj", "{679DBB88-D86B-43D4-8E0B-5481C6FC48CD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,8 +19,19 @@ Global
 		{BC6CBA47-D179-4261-93C5-8489BCE88221}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BC6CBA47-D179-4261-93C5-8489BCE88221}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BC6CBA47-D179-4261-93C5-8489BCE88221}.Release|Any CPU.Build.0 = Release|Any CPU
+		{017CC4F0-3C14-4480-B73B-523016EB38ED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{017CC4F0-3C14-4480-B73B-523016EB38ED}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{017CC4F0-3C14-4480-B73B-523016EB38ED}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{017CC4F0-3C14-4480-B73B-523016EB38ED}.Release|Any CPU.Build.0 = Release|Any CPU
+		{679DBB88-D86B-43D4-8E0B-5481C6FC48CD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{679DBB88-D86B-43D4-8E0B-5481C6FC48CD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{679DBB88-D86B-43D4-8E0B-5481C6FC48CD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{679DBB88-D86B-43D4-8E0B-5481C6FC48CD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {50C529DD-499C-40EE-8ECA-BB5E482E8555}
 	EndGlobalSection
 EndGlobal
